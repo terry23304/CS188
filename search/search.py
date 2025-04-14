@@ -94,7 +94,7 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
     exploredNodes = set()
     fringe = util.Stack() # node: position, direction, cost
 
-    fringe.push([[problem.getStartState(), 'Start', 0]])
+    fringe.push([[problem.getStartState(), 'Start']])
     
     while not fringe.isEmpty():
         path = fringe.pop()
@@ -109,7 +109,7 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
             if successor[0] in exploredNodes:
                 continue
             nextPath = path[:] # shallow copy
-            nextPath.append(successor)
+            nextPath.append(successor[:-1])
             fringe.push(nextPath)
         exploredNodes.add(currentState)
 
@@ -122,7 +122,7 @@ def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     path = []
     exploredNodes = set()
     fringe = util.Queue()
-    fringe.push([(problem.getStartState(), 'Start', 0)])
+    fringe.push([(problem.getStartState(), 'Start')])
 
     while not fringe.isEmpty():
         path = fringe.pop()
@@ -137,7 +137,7 @@ def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
             if successor[0] in exploredNodes:
                 continue
             nextPath = path[:] # shallow copy
-            nextPath.append(successor)
+            nextPath.append(successor[:-1])
             fringe.push(nextPath)
         exploredNodes.add(currentState)
 
