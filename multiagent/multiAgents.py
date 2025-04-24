@@ -144,7 +144,43 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        maxVal = -float('inf')
+        for action in gameState.getLegalActions(0): # Pacman is always agent 0
+            nextState = gameState.generateSuccessor(0, action=action)
+            value = self.getValue(nextState, 1, 0)
+            if value > maxVal:
+                maxVal = value
+                bestAction = action
+        return bestAction
+
+    def getValue(self, gameState, agentIndex, depth):
+        if gameState.isWin() or gameState.isLose() or depth == self.depth:
+            return self.evaluationFunction(gameState)
+        if agentIndex == 0:
+            depth += 1
+            if depth == self.depth:
+                return self.evaluationFunction(gameState)
+            return self.max_value(gameState, depth)
+        return self.min_value(gameState, agentIndex, depth)
+
+    def max_value(self, gameState, depth):
+        maxVal = -float('inf')
+        for action in gameState.getLegalActions(0): # Pacman is always agent 0
+            nextState = gameState.generateSuccessor(0, action=action)
+            value = self.getValue(nextState, 1, depth)
+            if value > maxVal:
+                maxVal = value
+        return maxVal
+
+    def min_value(self, gameState, agentIndex, depth):
+        minVal = float('inf')
+        legalActions = gameState.getLegalActions(agentIndex)
+        for action in legalActions:
+            nextState = gameState.generateSuccessor(agentIndex, action=action)
+            value = self.getValue(nextState, (agentIndex + 1) % gameState.getNumAgents(), depth)
+            if value < minVal:
+                minVal = value
+        return minVal
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
