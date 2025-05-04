@@ -297,7 +297,19 @@ def betterEvaluationFunction(currentGameState: GameState):
     DESCRIPTION: <write something here so we know what you did>
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    pos = currentGameState.getPacmanPosition()
+    curFood = currentGameState.getFood().asList()
+    ghostStates = currentGameState.getGhostStates()
+
+    distanceToGhost = [manhattanDistance(pos, ghostState.getPosition()) for ghostState in ghostStates]
+    distanceToFood = [manhattanDistance(pos, food) for food in curFood]
+
+    # If return a fixed value, all path would have same val,
+    # Pacman would don't konw where to go
+    if len(curFood) == 0:
+        return currentGameState.getScore()
+    return min(distanceToGhost) /  min(distanceToFood) ** 1.3 + 2 * currentGameState.getScore()
+
 
 # Abbreviation
 better = betterEvaluationFunction
